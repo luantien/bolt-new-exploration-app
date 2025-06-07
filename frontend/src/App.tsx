@@ -5,7 +5,7 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
-import LearningModule from './pages/LearningModule'
+import LearningModule from './components/LearningModule'
 
 const AppContent = () => {
   const [isLoginMode, setIsLoginMode] = useState(true)
