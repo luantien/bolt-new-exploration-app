@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Login from './components/Login'
 import Signup from './components/Signup'
-import ProtectedRoute from './components/ProtectedRoute'
+import Navbar from './components/Navbar'
 import Home from './pages/Home'
+import LearningModule from './pages/LearningModule'
 
-const AuthWrapper = () => {
+const AppContent = () => {
   const [isLoginMode, setIsLoginMode] = useState(true)
   const { user, loading } = useAuth()
 
@@ -29,16 +31,22 @@ const AuthWrapper = () => {
   }
 
   return (
-    <ProtectedRoute>
-      <Home />
-    </ProtectedRoute>
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/learning" element={<LearningModule />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
 function App() {
   return (
     <AuthProvider>
-      <AuthWrapper />
+      <AppContent />
     </AuthProvider>
   )
 }
