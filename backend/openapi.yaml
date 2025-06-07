@@ -1,0 +1,270 @@
+openapi: 3.0.3
+info:
+  title: Learning Platform API
+  description: |
+    A comprehensive API for the Learning Platform that provides AI-powered feedback 
+    and educational content management. This API enables interactive learning experiences 
+    through intelligent feedback mechanisms and progress tracking.
+  version: 1.0.0
+  contact:
+    name: Learning Platform Team
+    email: support@learningplatform.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3001
+    description: Development server
+  - url: https://api.learningplatform.com
+    description: Production server
+
+tags:
+  - name: feedback
+    description: AI-powered learning feedback and assessment
+  - name: health
+    description: API health and status endpoints
+
+paths:
+  /:
+    get:
+      tags:
+        - health
+      summary: Health check endpoint
+      description: Returns the current status of the backend service
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is running successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Backend is running."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/llm-feedback:
+    post:
+      tags:
+        - feedback
+      summary: Generate AI-powered learning feedback
+      description: |
+        Provides personalized feedback and follow-up questions based on the user's 
+        learning topic and current progress. The AI analyzes the provided information 
+        to generate contextually relevant feedback that helps guide the learning process.
+        
+        This endpoint supports various learning topics including AI, machine learning, 
+        programming, and general subjects. The response includes both encouraging 
+        feedback and thought-provoking questions to enhance the learning experience.
+      operationId: generateLLMFeedback
+      requestBody:
+        required: true
+        description: Learning context and progress information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+            examples:
+              ai_learning:
+                summary: AI Learning Progress
+                description: Example request for AI topic feedback
+                value:
+                  topic: "ai"
+                  userProgress: "Completed introduction to neural networks and understanding basic concepts of machine learning algorithms"
+              programming_learning:
+                summary: Programming Learning Progress
+                description: Example request for programming topic feedback
+                value:
+                  topic: "programming"
+                  userProgress: "Learned JavaScript fundamentals, working on React components and state management"
+              general_learning:
+                summary: General Learning Progress
+                description: Example request for general topic feedback
+                value:
+                  topic: "data structures"
+                  userProgress: "Studied arrays and linked lists, currently exploring tree structures"
+      responses:
+        '200':
+          description: Feedback generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackResponse'
+              examples:
+                ai_feedback:
+                  summary: AI Topic Feedback
+                  description: Example feedback for AI learning progress
+                  value:
+                    feedback: "Excellent understanding of AI fundamentals! Your grasp of machine learning concepts shows solid progress."
+                    question: "How do you think neural networks differ from traditional algorithms?"
+                programming_feedback:
+                  summary: Programming Topic Feedback
+                  description: Example feedback for programming learning progress
+                  value:
+                    feedback: "Your programming skills are developing well! Keep practicing with hands-on projects."
+                    question: "Which programming paradigm interests you most and why?"
+                general_feedback:
+                  summary: General Topic Feedback
+                  description: Example feedback for general learning topics
+                  value:
+                    feedback: "Good progress on your learning journey! Your engagement with the material is commendable."
+                    question: "What aspect of this topic would you like to explore further?"
+        '400':
+          description: Bad request - Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missing_fields:
+                  summary: Missing Required Fields
+                  description: Error when topic or userProgress is not provided
+                  value:
+                    error: "Both topic and userProgress are required"
+                invalid_format:
+                  summary: Invalid Request Format
+                  description: Error when request body is malformed
+                  value:
+                    error: "Invalid JSON format in request body"
+        '401':
+          description: Unauthorized - Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Authentication token required"
+        '403':
+          description: Forbidden - Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Insufficient permissions to access this resource"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                server_error:
+                  summary: Server Error
+                  description: Unexpected server error occurred
+                  value:
+                    error: "Internal server error occurred while processing feedback"
+                ai_service_error:
+                  summary: AI Service Error
+                  description: Error in AI feedback generation service
+                  value:
+                    error: "AI feedback service temporarily unavailable"
+
+components:
+  schemas:
+    FeedbackRequest:
+      type: object
+      required:
+        - topic
+        - userProgress
+      properties:
+        topic:
+          type: string
+          description: |
+            The learning topic or subject area for which feedback is requested. 
+            Common topics include 'ai', 'machine learning', 'programming', but 
+            any educational topic is supported.
+          minLength: 1
+          maxLength: 100
+          example: "ai"
+        userProgress:
+          type: string
+          description: |
+            A detailed description of the user's current learning progress, 
+            achievements, and areas of focus. This helps the AI provide more 
+            personalized and relevant feedback.
+          minLength: 10
+          maxLength: 1000
+          example: "Completed introduction to neural networks and understanding basic concepts of machine learning algorithms"
+      example:
+        topic: "machine learning"
+        userProgress: "Studied supervised learning algorithms including linear regression and decision trees. Currently working on understanding ensemble methods."
+
+    FeedbackResponse:
+      type: object
+      required:
+        - feedback
+        - question
+      properties:
+        feedback:
+          type: string
+          description: |
+            Personalized feedback message that acknowledges the user's progress 
+            and provides encouragement or guidance for continued learning.
+          minLength: 10
+          maxLength: 500
+          example: "Excellent understanding of AI fundamentals! Your grasp of machine learning concepts shows solid progress."
+        question:
+          type: string
+          description: |
+            A thought-provoking follow-up question designed to deepen the user's 
+            understanding and encourage further exploration of the topic.
+          minLength: 10
+          maxLength: 200
+          example: "How do you think neural networks differ from traditional algorithms?"
+      example:
+        feedback: "Great work on machine learning concepts! You're building a strong foundation."
+        question: "What real-world problem would you solve with machine learning?"
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: A human-readable error message describing what went wrong
+          example: "Both topic and userProgress are required"
+        code:
+          type: string
+          description: An optional error code for programmatic error handling
+          example: "MISSING_REQUIRED_FIELDS"
+        details:
+          type: object
+          description: Additional error details for debugging purposes
+          additionalProperties: true
+      example:
+        error: "Both topic and userProgress are required"
+        code: "VALIDATION_ERROR"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token-based authentication. Include the token in the Authorization 
+        header as 'Bearer <token>'. Tokens can be obtained through the authentication 
+        endpoints.
+    
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: |
+        API key authentication for service-to-service communication. 
+        Include your API key in the X-API-Key header.
+
+# Global security requirement (can be overridden per endpoint)
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+externalDocs:
+  description: Learning Platform Documentation
+  url: https://docs.learningplatform.com
