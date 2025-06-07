@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Brain, CheckCircle, MessageSquare, ArrowRight, BookOpen, Lightbulb, AlertCircle } from 'lucide-react'
+import { requestAIFeedback } from '../services/feedbackService.js'
 
 const LearningModule = () => {
   const [feedbackGiven, setFeedbackGiven] = useState(false)
@@ -14,35 +15,22 @@ const LearningModule = () => {
     setError('')
     
     try {
-      const response = await fetch('http://localhost:3001/api/llm-feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          topic: 'ai',
-          userProgress: 'Completed introduction to AI fundamentals including understanding of artificial intelligence simulation, machine learning concepts, and neural networks. Successfully engaged with the learning material and demonstrated comprehension of core concepts.'
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-
-      const data = await response.json()
+      const response = await requestAIFeedback(
+        'ai',
+        'Completed introduction to AI fundamentals including understanding of artificial intelligence simulation, machine learning concepts, and neural networks. Successfully engaged with the learning material and demonstrated comprehension of core concepts.'
+      )
       
-      // Extract feedback and question from response
       setAiResponse({
-        feedback: data.feedback,
-        question: data.question
+        feedback: response.feedback,
+        question: response.question
       })
       
       setFeedbackGiven(true)
       setShowResponse(true)
       
     } catch (err) {
-      console.log('Error fetching AI feedback:', err)
-      setError('Failed to get AI feedback. Please try again.')
+      console.error('Error fetching AI feedback:', err)
+      setError(err.message || 'Failed to get AI feedback. Please try again.')
     } finally {
       setLoading(false)
     }
