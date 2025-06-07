@@ -1,14 +1,51 @@
 import React, { useState } from 'react'
-import { Brain, CheckCircle, MessageSquare, ArrowRight, BookOpen, Lightbulb } from 'lucide-react'
+import { Brain, CheckCircle, MessageSquare, ArrowRight, BookOpen, Lightbulb, AlertCircle } from 'lucide-react'
 
 const LearningModule = () => {
   const [feedbackGiven, setFeedbackGiven] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
   const [showResponse, setShowResponse] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [aiResponse, setAiResponse] = useState({ feedback: '', question: '' })
 
-  const handleFeedback = () => {
-    setFeedbackGiven(true)
-    setShowResponse(true)
+  const handleFeedback = async () => {
+    setLoading(true)
+    setError('')
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/llm-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          topic: 'ai',
+          userProgress: 'Completed introduction to AI fundamentals including understanding of artificial intelligence simulation, machine learning concepts, and neural networks. Successfully engaged with the learning material and demonstrated comprehension of core concepts.'
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      
+      // Extract feedback and question from response
+      setAiResponse({
+        feedback: data.feedback,
+        question: data.question
+      })
+      
+      setFeedbackGiven(true)
+      setShowResponse(true)
+      
+    } catch (err) {
+      console.log('Error fetching AI feedback:', err)
+      setError('Failed to get AI feedback. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleComplete = () => {
@@ -106,18 +143,34 @@ const LearningModule = () => {
               Test your understanding by engaging with our AI assistant. Click the button below to receive 
               personalized feedback on this learning module.
             </p>
+
+            {/* Error Display */}
+            {error && (
+              <div className="mb-6 flex items-center space-x-2 text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                <AlertCircle className="h-4 w-4" />
+                <span className="text-sm">{error}</span>
+              </div>
+            )}
             
             <button
+              id="ask-ai-button"
               onClick={handleFeedback}
-              disabled={feedbackGiven}
+              disabled={feedbackGiven || loading}
               className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
                 feedbackGiven
                   ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                  : loading
+                  ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                   : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5'
               }`}
               aria-label="Get AI feedback on your learning progress"
             >
-              {feedbackGiven ? (
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-400"></div>
+                  <span>Getting Feedback...</span>
+                </>
+              ) : feedbackGiven ? (
                 <>
                   <CheckCircle className="h-5 w-5" />
                   <span>Feedback Received</span>
@@ -133,6 +186,7 @@ const LearningModule = () => {
             {/* Response Display Area */}
             {showResponse && (
               <div 
+                id="ai-response-area"
                 className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 animate-fade-in"
                 role="region"
                 aria-label="AI feedback response"
@@ -141,14 +195,22 @@ const LearningModule = () => {
                   <div className="p-2 bg-blue-100 rounded-lg">
                     <Brain className="h-5 w-5 text-blue-600" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-semibold text-blue-900 mb-2">AI Assistant Response</h3>
-                    <p className="text-blue-800 leading-relaxed">
-                      Excellent progress! You've successfully completed the introduction to AI fundamentals. 
-                      Your engagement with the material shows a solid understanding of the core concepts. 
-                      The key takeaways about AI simulation, machine learning, and neural networks will 
-                      serve as a strong foundation for the upcoming modules.
-                    </p>
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium text-blue-800 mb-1">Feedback:</h4>
+                        <p className="text-blue-800 leading-relaxed">
+                          {aiResponse.feedback}
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-blue-800 mb-1">Follow-up Question:</h4>
+                        <p className="text-blue-800 leading-relaxed italic">
+                          {aiResponse.question}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
