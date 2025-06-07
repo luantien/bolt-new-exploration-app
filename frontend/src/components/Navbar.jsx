@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { Home, BookOpen, LogOut } from 'lucide-react'
+import { Home, BookOpen, LogOut, User } from 'lucide-react'
 
 const Navbar = () => {
   const { user, signOut } = useAuth()
@@ -59,7 +59,21 @@ const Navbar = () => {
             Learning Module
           </a>
         </li>
-        <li style={{ marginLeft: 'auto' }}>
+        <li style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.5rem 1rem',
+            backgroundColor: '#f9fafb',
+            border: '1px solid #e5e7eb',
+            borderRadius: '0.375rem',
+            color: '#374151',
+            fontSize: '0.875rem'
+          }}>
+            <User size={16} />
+            <span>Welcome, {user.email}</span>
+          </div>
           <button
             onClick={handleLogout}
             style={{
