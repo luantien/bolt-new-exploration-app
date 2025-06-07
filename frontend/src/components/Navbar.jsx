@@ -65,10 +65,10 @@ const Navbar = () => {
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.5rem 1rem',
-            backgroundColor: '#f9fafb',
-            border: '1px solid #e5e7eb',
+            backgroundColor: '#f0fdf4',
+            border: '1px solid #bbf7d0',
             borderRadius: '0.375rem',
-            color: '#374151',
+            color: '#166534',
             fontSize: '0.875rem'
           }}>
             <User size={16} />
