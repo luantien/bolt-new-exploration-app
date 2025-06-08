@@ -9,13 +9,15 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
+    "dev:netlify": "netlify dev",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules",
-    "env:setup": "cp .env.sample .env && echo 'Please edit .env with your configuration'"
+    "env:setup": "cp .env.sample .env && echo 'Please edit .env with your configuration'",
+    "functions:test": "netlify functions:serve"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
@@ -34,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "globals": "^15.9.0",
+    "netlify-cli": "^17.10.1",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.5.3",
