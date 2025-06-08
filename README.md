@@ -68,12 +68,16 @@ VITE_NODE_ENV=development
    VITE_SUPABASE_ANON_KEY=your-anon-key-here
    ```
 
-### Environment Files
+### Environment Configuration Options
 
-- **`.env.sample`** - Template with all required variables
-- **`.env.development`** - Development-specific settings
-- **`.env.production`** - Production-specific settings
-- **`.env`** - Your local configuration (not tracked in git)
+The `.env.sample` file contains all possible configuration options:
+
+- **Required Variables**: Supabase URL and anon key
+- **Environment Settings**: NODE_ENV, dev tools, logging level
+- **Development Options**: Debug tools and verbose logging
+- **Production Settings**: Optimized for production deployment
+
+Simply copy `.env.sample` to `.env` and configure the values for your specific environment.
 
 ## 🏗️ Project Structure
 
@@ -100,8 +104,6 @@ learning-platform/
 ├── supabase/                   # Database migrations and schema
 │   └── migrations/            # SQL migration files
 ├── .env.sample                # Environment variables template
-├── .env.development           # Development environment config
-├── .env.production            # Production environment config
 ├── package.json               # Dependencies and scripts
 ├── tsconfig.json              # TypeScript configuration
 ├── vite.config.ts             # Vite build configuration
@@ -213,6 +215,8 @@ Make sure to set these in your hosting platform:
 VITE_SUPABASE_URL=your_production_supabase_url
 VITE_SUPABASE_ANON_KEY=your_production_supabase_anon_key
 VITE_NODE_ENV=production
+VITE_DEV_TOOLS=false
+VITE_LOG_LEVEL=error
 ```
 
 ## 🧪 Development Guidelines
