@@ -1,247 +1,277 @@
-# Learning Platform - Full-Stack Application
+# Learning Platform
 
-A comprehensive learning platform with AI-powered feedback, built with React frontend and Express backend.
+A beautiful, interactive learning platform built with React, featuring AI and machine learning educational content with comprehensive progress tracking.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js (v16 or higher)
-- npm or yarn package manager
+- npm (v8 or higher)
+- A Supabase account and project
 
 ### Installation
 
 1. **Clone and install dependencies:**
    ```bash
-   npm run install:all
+   git clone <repository-url>
+   cd learning-platform
+   npm install
    ```
 
-2. **Configure environment variables:**
+2. **Set up environment variables:**
    ```bash
-   # Copy the example environment file
-   cp frontend/.env.example frontend/.env
+   # Copy the sample environment file
+   npm run env:setup
    
-   # Edit the .env file with your configuration
-   nano frontend/.env
+   # Edit .env with your Supabase configuration
+   nano .env
    ```
 
-3. **Start the development servers:**
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-This will start both frontend (http://localhost:5173) and backend (http://localhost:3001) servers concurrently.
+The application will be available at http://localhost:5173
 
-## 🔧 Configuration
+## 🔧 Environment Configuration
 
-### Backend Domain Configuration
+### Required Environment Variables
 
-The frontend can be configured to work with different backend environments through environment variables.
-
-#### Environment Variables
-
-Create a `.env` file in the `frontend/` directory with the following variables:
+The application requires the following environment variables to function properly:
 
 ```bash
-# Backend API Configuration
-VITE_BACKEND_URL=http://localhost:3001
-VITE_BACKEND_API_VERSION=v1
-
-# Supabase Configuration (if using authentication)
-VITE_SUPABASE_URL=your_supabase_url_here
+# Supabase Configuration (Required)
+VITE_SUPABASE_URL=your_supabase_project_url_here
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 
-# Environment
+# Application Environment
 VITE_NODE_ENV=development
 ```
 
-#### Environment-Specific Configuration
+### Environment Setup Steps
 
-The application supports multiple environment configurations:
+1. **Copy the sample file:**
+   ```bash
+   cp .env.sample .env
+   ```
 
-**Development (.env.development):**
-```bash
-VITE_BACKEND_URL=http://localhost:3001
-VITE_BACKEND_API_VERSION=v1
-VITE_NODE_ENV=development
-```
+2. **Get your Supabase credentials:**
+   - Go to [Supabase Dashboard](https://app.supabase.com)
+   - Select your project or create a new one
+   - Go to Settings > API
+   - Copy the Project URL and anon/public key
 
-**Staging (.env.staging):**
-```bash
-VITE_BACKEND_URL=https://api-staging.learningplatform.com
-VITE_BACKEND_API_VERSION=v1
-VITE_NODE_ENV=staging
-```
+3. **Update your .env file:**
+   ```bash
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key-here
+   ```
 
-**Production (.env.production):**
-```bash
-VITE_BACKEND_URL=https://api.learningplatform.com
-VITE_BACKEND_API_VERSION=v1
-VITE_NODE_ENV=production
-```
+### Environment Configuration Options
 
-#### Domain Format Requirements
+The `.env.sample` file contains all possible configuration options:
 
-- **Protocol**: Must include `http://` or `https://`
-- **No trailing slash**: URLs should not end with `/`
-- **No API path**: Don't include `/api` in the base URL (it's added automatically)
+- **Required Variables**: Supabase URL and anon key
+- **Environment Settings**: NODE_ENV, dev tools, logging level
+- **Development Options**: Debug tools and verbose logging
+- **Production Settings**: Optimized for production deployment
 
-**Valid examples:**
-- `http://localhost:3001`
-- `https://api.example.com`
-- `https://my-backend.herokuapp.com`
-
-**Invalid examples:**
-- `localhost:3001` (missing protocol)
-- `http://localhost:3001/` (trailing slash)
-- `http://localhost:3001/api` (includes API path)
-
-#### Configuration Validation
-
-The application automatically validates the backend URL configuration:
-
-1. **URL Format**: Ensures proper HTTP/HTTPS protocol
-2. **Environment Check**: Validates required variables are present
-3. **Fallback Handling**: Falls back to localhost in development if configuration fails
-4. **Error Handling**: Throws errors in production for invalid configurations
-
-#### Using Different Environments
-
-**Development:**
-```bash
-npm run dev
-# Uses .env.development or .env
-```
-
-**Staging:**
-```bash
-NODE_ENV=staging npm run build
-# Uses .env.staging
-```
-
-**Production:**
-```bash
-NODE_ENV=production npm run build
-# Uses .env.production
-```
-
-### API Service Architecture
-
-The application uses a modular API service architecture:
-
-- **`frontend/src/config/api.js`**: Central API configuration and validation
-- **`frontend/src/services/feedbackService.js`**: Feedback-specific API calls
-- **Automatic health checks**: Built-in backend connectivity verification
-- **Error handling**: Comprehensive error handling with user-friendly messages
-
-### Troubleshooting Configuration
-
-**Common Issues:**
-
-1. **"Backend not connected" error:**
-   - Check if backend server is running
-   - Verify `VITE_BACKEND_URL` is correct
-   - Ensure no firewall blocking the connection
-
-2. **"Invalid VITE_BACKEND_URL format" error:**
-   - Ensure URL includes `http://` or `https://`
-   - Remove any trailing slashes
-   - Don't include `/api` in the base URL
-
-3. **CORS errors:**
-   - Verify backend CORS configuration includes your frontend URL
-   - Check if ports match your configuration
-
-**Debug Mode:**
-
-In development, the application logs the current API configuration to the browser console. Check the developer tools console for configuration details.
+Simply copy `.env.sample` to `.env` and configure the values for your specific environment.
 
 ## 🏗️ Project Structure
 
 ```
-├── frontend/                 # React frontend application
-│   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── config/          # Configuration files
-│   │   │   └── api.js       # API configuration and validation
-│   │   ├── services/        # API service modules
-│   │   │   └── feedbackService.js
-│   │   ├── contexts/        # React contexts
-│   │   └── pages/           # Page components
-│   ├── .env.example         # Environment variables template
-│   ├── .env.development     # Development environment config
-│   ├── .env.staging         # Staging environment config
-│   └── .env.production      # Production environment config
-├── backend/                 # Express backend API
-│   ├── server.js           # Main server file
-│   ├── openapi.yaml        # API documentation
-│   └── package.json        # Backend dependencies
-└── package.json            # Root package.json with scripts
+learning-platform/
+├── src/                          # Source code
+│   ├── components/              # React components
+│   │   ├── LearningModule.jsx   # Main learning interface
+│   │   ├── Login.jsx           # Authentication login
+│   │   ├── Signup.jsx          # User registration
+│   │   └── Navbar.jsx          # Navigation component
+│   ├── contexts/               # React contexts
+│   │   └── AuthContext.jsx     # Authentication state management
+│   ├── services/               # API and service modules
+│   │   └── progressService.js  # Progress tracking service
+│   ├── pages/                  # Page components
+│   │   └── Home.jsx           # Dashboard and home page
+│   ├── config/                 # Configuration files
+│   │   └── supabase.js        # Supabase client setup
+│   ├── App.tsx                 # Main application component
+│   ├── main.tsx               # Application entry point
+│   └── index.css              # Global styles and Tailwind imports
+├── public/                     # Static assets
+├── supabase/                   # Database migrations and schema
+│   └── migrations/            # SQL migration files
+├── .env.sample                # Environment variables template
+├── package.json               # Dependencies and scripts
+├── tsconfig.json              # TypeScript configuration
+├── vite.config.ts             # Vite build configuration
+├── tailwind.config.js         # Tailwind CSS configuration
+└── README.md                  # This file
 ```
 
-## 🔌 API Endpoints
+## 📦 Available Scripts
 
-### Health Check
-- **GET** `/` - Basic health check
-- **GET** `/api/status` - Detailed API status
-
-### Learning & Feedback
-- **POST** `/api/llm-feedback` - Get AI-powered learning feedback
-
-### Documentation
-- **GET** `/api-docs` - Swagger UI documentation (development only)
-- **GET** `/api/openapi.json` - OpenAPI specification
-
-## 🚀 Deployment
-
-### Frontend Deployment
-
-1. **Build for production:**
-   ```bash
-   cd frontend
-   npm run build
-   ```
-
-2. **Configure production environment:**
-   ```bash
-   # Set production backend URL
-   echo "VITE_BACKEND_URL=https://your-api-domain.com" > .env.production
-   ```
-
-3. **Deploy to your hosting platform** (Netlify, Vercel, etc.)
-
-### Backend Deployment
-
-1. **Deploy to your hosting platform** (Heroku, Railway, etc.)
-2. **Update frontend configuration** with the deployed backend URL
-3. **Verify CORS settings** include your frontend domain
-
-## 🧪 Testing
-
+### Development
 ```bash
-# Run frontend tests
-cd frontend && npm test
+npm run dev          # Start development server
+npm run preview      # Preview production build locally
+```
 
-# Run backend tests
-cd backend && npm test
+### Building
+```bash
+npm run build        # Build for production
+npm run build:analyze # Build with bundle analysis
+```
+
+### Code Quality
+```bash
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint issues automatically
+npm run type-check   # Run TypeScript type checking
+```
+
+### Maintenance
+```bash
+npm run clean        # Clean build artifacts and node_modules
+npm run install:clean # Clean install dependencies
+npm run env:setup    # Set up environment file from template
+npm run env:validate # Validate environment configuration
 ```
 
 ## 📚 Features
 
-- **🤖 AI-Powered Feedback**: Get personalized learning feedback
-- **🔐 Authentication**: Secure user authentication with Supabase
-- **📱 Responsive Design**: Works on all device sizes
-- **🌍 Multi-Environment**: Configurable for different deployment environments
-- **🔧 Health Monitoring**: Built-in health checks and status monitoring
-- **📖 API Documentation**: Comprehensive OpenAPI documentation
+### 🎓 Learning Modules
+- **Interactive Content**: Comprehensive AI and machine learning educational material
+- **Progressive Learning**: Structured modules from beginner to advanced
+- **Real-time Feedback**: Instant feedback on learning progress
+
+### 📊 Progress Tracking
+- **Completion Status**: Track which modules you've completed
+- **Learning Analytics**: Monitor your learning journey and milestones
+- **Persistent Storage**: Progress saved securely to Supabase database
+
+### 🔐 Authentication & Security
+- **Secure Authentication**: Email/password authentication via Supabase
+- **Row-Level Security**: User data protected with database-level security
+- **Session Management**: Automatic session handling and renewal
+
+### 🎨 User Experience
+- **Responsive Design**: Beautiful, mobile-first design with Tailwind CSS
+- **Modern UI**: Clean, professional interface with smooth animations
+- **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
+- **Dark Mode Ready**: Prepared for dark mode implementation
+
+### 🚀 Performance
+- **Fast Loading**: Optimized with Vite for lightning-fast development and builds
+- **Code Splitting**: Automatic code splitting for optimal loading
+- **Modern Standards**: Built with latest React and TypeScript best practices
+
+## 🗄️ Database Schema
+
+The application uses Supabase with the following main table:
+
+### user_progress
+- `id` (uuid, primary key)
+- `user_id` (uuid, foreign key to auth.users)
+- `module_name` (varchar, required)
+- `is_completed` (boolean, default false)
+- `last_accessed` (timestamptz, default now())
+- `created_at` (timestamptz, default now())
+- `updated_at` (timestamptz, default now())
+
+## 🚀 Deployment
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Deploy to Netlify
+
+1. **Connect repository to Netlify**
+2. **Configure build settings:**
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+3. **Add environment variables in Netlify dashboard**
+4. **Deploy**
+
+### Deploy to Vercel
+
+1. **Connect repository to Vercel**
+2. **Configure build settings:**
+   - Build command: `npm run build`
+   - Output directory: `dist`
+3. **Add environment variables in Vercel dashboard**
+4. **Deploy**
+
+### Environment Variables for Production
+
+Make sure to set these in your hosting platform:
+
+```bash
+VITE_SUPABASE_URL=your_production_supabase_url
+VITE_SUPABASE_ANON_KEY=your_production_supabase_anon_key
+VITE_NODE_ENV=production
+VITE_DEV_TOOLS=false
+VITE_LOG_LEVEL=error
+```
+
+## 🧪 Development Guidelines
+
+### Code Style
+- Use TypeScript for type safety
+- Follow React best practices and hooks patterns
+- Use Tailwind CSS for styling
+- Implement proper error handling
+- Write descriptive component and function names
+
+### Component Structure
+- Keep components focused and single-purpose
+- Use proper prop types and interfaces
+- Implement proper loading and error states
+- Follow accessibility guidelines
+
+### State Management
+- Use React Context for global state
+- Keep local state minimal and focused
+- Implement proper cleanup in useEffect hooks
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and test thoroughly
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
+
+### Development Setup for Contributors
+
+1. Follow the installation steps above
+2. Create a `.env` file with your Supabase credentials
+3. Run `npm run dev` to start development
+4. Make your changes and test
+5. Run `npm run lint` and `npm run type-check` before committing
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you encounter any issues:
+
+1. Check the [Issues](https://github.com/your-repo/issues) page
+2. Review the environment setup steps
+3. Verify your Supabase configuration
+4. Check the browser console for error messages
+
+## 🔗 Links
+
+- [Supabase Documentation](https://supabase.com/docs)
+- [React Documentation](https://react.dev)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev)

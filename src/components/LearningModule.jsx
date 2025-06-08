@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Brain, CheckCircle, MessageSquare, ArrowRight, BookOpen, Lightbulb, AlertCircle, Clock, Trophy, RotateCcw } from 'lucide-react'
+import { Brain, CheckCircle, BookOpen, Lightbulb, AlertCircle, Clock, Trophy, RotateCcw } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
-import { requestAIFeedback } from '../services/feedbackService.js'
 import { updateModuleProgress, getModuleProgress } from '../services/progressService.js'
 
 const LearningModule = () => {
-  // Existing state
-  const [feedbackGiven, setFeedbackGiven] = useState(false)
-  const [showResponse, setShowResponse] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [aiResponse, setAiResponse] = useState({ feedback: '', question: '' })
-
-  // New progress tracking state
   const [progressLoading, setProgressLoading] = useState(false)
   const [progressError, setProgressError] = useState('')
   const [progressSuccess, setProgressSuccess] = useState('')
@@ -22,7 +13,6 @@ const LearningModule = () => {
   const { user } = useAuth()
   const MODULE_NAME = 'Introduction to AI'
 
-  // Load existing progress on component mount
   useEffect(() => {
     const loadProgress = async () => {
       if (!user) return
@@ -41,7 +31,6 @@ const LearningModule = () => {
     loadProgress()
   }, [user])
 
-  // Update last accessed timestamp when component mounts
   useEffect(() => {
     const updateLastAccessed = async () => {
       if (!user) return
@@ -56,32 +45,6 @@ const LearningModule = () => {
     updateLastAccessed()
   }, [user, isCompleted])
 
-  const handleFeedback = async () => {
-    setLoading(true)
-    setError('')
-    
-    try {
-      const response = await requestAIFeedback(
-        'ai',
-        'Completed introduction to AI fundamentals including understanding of artificial intelligence simulation, machine learning concepts, and neural networks. Successfully engaged with the learning material and demonstrated comprehension of core concepts.'
-      )
-      
-      setAiResponse({
-        feedback: response.feedback,
-        question: response.question
-      })
-      
-      setFeedbackGiven(true)
-      setShowResponse(true)
-      
-    } catch (err) {
-      console.error('Error fetching AI feedback:', err)
-      setError(err.message || 'Failed to get AI feedback. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const handleComplete = async () => {
     setProgressLoading(true)
     setProgressError('')
@@ -95,7 +58,6 @@ const LearningModule = () => {
         setModuleProgress(result.data)
         setProgressSuccess(result.message)
         
-        // Clear success message after 5 seconds
         setTimeout(() => {
           setProgressSuccess('')
         }, 5000)
@@ -103,7 +65,6 @@ const LearningModule = () => {
         setProgressError(result.error)
       }
     } catch (error) {
-      console.error('Error completing module:', error)
       setProgressError('Failed to mark module as complete. Please try again.')
     } finally {
       setProgressLoading(false)
@@ -123,7 +84,6 @@ const LearningModule = () => {
         setModuleProgress(result.data)
         setProgressSuccess('Module progress reset successfully!')
         
-        // Clear success message after 3 seconds
         setTimeout(() => {
           setProgressSuccess('')
         }, 3000)
@@ -131,7 +91,6 @@ const LearningModule = () => {
         setProgressError(result.error)
       }
     } catch (error) {
-      console.error('Error resetting module:', error)
       setProgressError('Failed to reset module progress. Please try again.')
     } finally {
       setProgressLoading(false)
@@ -157,7 +116,6 @@ const LearningModule = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header Section */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-4">
@@ -171,7 +129,6 @@ const LearningModule = () => {
               </div>
             </div>
 
-            {/* Progress Status Badge */}
             <div className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium ${
               isCompleted 
                 ? 'bg-green-100 text-green-800 border border-green-200' 
@@ -191,7 +148,6 @@ const LearningModule = () => {
             </div>
           </div>
           
-          {/* Progress Information */}
           <div className="flex items-center justify-between text-sm text-gray-500">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
@@ -213,7 +169,6 @@ const LearningModule = () => {
       </div>
 
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Progress Messages */}
         {progressSuccess && (
           <div className="mb-6 flex items-center space-x-2 text-green-600 bg-green-50 p-4 rounded-xl border border-green-200 animate-fade-in">
             <CheckCircle className="h-5 w-5" />
@@ -228,9 +183,7 @@ const LearningModule = () => {
           </div>
         )}
 
-        {/* Main Content Area */}
-        <main className="space-y-8" role="main" aria-label="Learning content">
-          {/* Learning Material Section */}
+        <main className="space-y-8">
           <section className="bg-white rounded-2xl shadow-sm border p-8">
             <div className="flex items-center space-x-3 mb-6">
               <Lightbulb className="h-6 w-6 text-amber-500" />
@@ -259,115 +212,16 @@ const LearningModule = () => {
               </p>
             </div>
 
-            {/* Key Concepts Highlight */}
             <div className="mt-8 p-6 bg-indigo-50 rounded-xl border border-indigo-100">
               <h3 className="font-semibold text-indigo-900 mb-3">Key Concepts to Remember:</h3>
               <ul className="space-y-2 text-indigo-800">
-                <li className="flex items-start space-x-2">
-                  <ArrowRight className="h-4 w-4 mt-0.5 text-indigo-600" />
-                  <span>AI simulates human intelligence in machines</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <ArrowRight className="h-4 w-4 mt-0.5 text-indigo-600" />
-                  <span>Machine learning enables systems to improve through experience</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <ArrowRight className="h-4 w-4 mt-0.5 text-indigo-600" />
-                  <span>Deep learning uses neural networks for complex pattern recognition</span>
-                </li>
+                <li>• AI simulates human intelligence in machines</li>
+                <li>• Machine learning enables systems to improve through experience</li>
+                <li>• Deep learning uses neural networks for complex pattern recognition</li>
               </ul>
             </div>
           </section>
 
-          {/* AI Interaction Section */}
-          <section 
-            className="bg-white rounded-2xl shadow-sm border p-8"
-            aria-label="Interactive AI engagement section"
-          >
-            <div className="flex items-center space-x-3 mb-6">
-              <MessageSquare className="h-6 w-6 text-blue-500" />
-              <h2 className="text-xl font-semibold text-gray-900">Interactive Learning</h2>
-            </div>
-            
-            <p className="text-gray-600 mb-6">
-              Test your understanding by engaging with our AI assistant. Click the button below to receive 
-              personalized feedback on this learning module.
-            </p>
-
-            {/* Error Display */}
-            {error && (
-              <div className="mb-6 flex items-center space-x-2 text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
-                <AlertCircle className="h-4 w-4" />
-                <span className="text-sm">{error}</span>
-              </div>
-            )}
-            
-            <button
-              id="ask-ai-button"
-              onClick={handleFeedback}
-              disabled={feedbackGiven || loading}
-              className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                feedbackGiven
-                  ? 'bg-green-100 text-green-700 cursor-not-allowed'
-                  : loading
-                  ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5'
-              }`}
-              aria-label="Get AI feedback on your learning progress"
-            >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-400"></div>
-                  <span>Getting Feedback...</span>
-                </>
-              ) : feedbackGiven ? (
-                <>
-                  <CheckCircle className="h-5 w-5" />
-                  <span>Feedback Received</span>
-                </>
-              ) : (
-                <>
-                  <Brain className="h-5 w-5" />
-                  <span>Get AI Feedback</span>
-                </>
-              )}
-            </button>
-
-            {/* Response Display Area */}
-            {showResponse && (
-              <div 
-                id="ai-response-area"
-                className="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 animate-fade-in"
-                role="region"
-                aria-label="AI feedback response"
-              >
-                <div className="flex items-start space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Brain className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-blue-900 mb-2">AI Assistant Response</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-medium text-blue-800 mb-1">Feedback:</h4>
-                        <p className="text-blue-800 leading-relaxed">
-                          {aiResponse.feedback}
-                        </p>
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-blue-800 mb-1">Follow-up Question:</h4>
-                        <p className="text-blue-800 leading-relaxed italic">
-                          {aiResponse.question}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </section>
-
-          {/* Completion Section */}
           <section className="bg-white rounded-2xl shadow-sm border p-8">
             <div className="text-center">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Module Completion</h2>
@@ -388,7 +242,6 @@ const LearningModule = () => {
                         ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                         : 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 hover:shadow-lg transform hover:-translate-y-0.5'
                     }`}
-                    aria-label="Mark learning module as complete"
                   >
                     {progressLoading ? (
                       <>
@@ -417,7 +270,6 @@ const LearningModule = () => {
                           ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                           : 'bg-gray-600 text-white hover:bg-gray-700 hover:shadow-lg transform hover:-translate-y-0.5'
                       }`}
-                      aria-label="Reset module progress"
                     >
                       {progressLoading ? (
                         <>
@@ -435,7 +287,6 @@ const LearningModule = () => {
                 )}
               </div>
 
-              {/* Progress Information Display */}
               {moduleProgress && (
                 <div className="mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
                   <h3 className="font-semibold text-gray-900 mb-4">Progress Details</h3>
