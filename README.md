@@ -1,27 +1,30 @@
-# Learning Platform - Frontend Application
+# Learning Platform
 
-A beautiful, interactive learning platform built with React, featuring AI and machine learning educational content with progress tracking.
+A beautiful, interactive learning platform built with React, featuring AI and machine learning educational content with comprehensive progress tracking.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js (v16 or higher)
-- npm or yarn package manager
+- npm (v8 or higher)
+- A Supabase account and project
 
 ### Installation
 
-1. **Install dependencies:**
+1. **Clone and install dependencies:**
    ```bash
-   cd frontend && npm install
+   git clone <repository-url>
+   cd learning-platform
+   npm install
    ```
 
-2. **Configure environment variables:**
+2. **Set up environment variables:**
    ```bash
-   # Copy the example environment file
-   cp frontend/.env.example frontend/.env
+   # Copy the sample environment file
+   npm run env:setup
    
-   # Edit the .env file with your Supabase configuration
-   nano frontend/.env
+   # Edit .env with your Supabase configuration
+   nano .env
    ```
 
 3. **Start the development server:**
@@ -31,124 +34,240 @@ A beautiful, interactive learning platform built with React, featuring AI and ma
 
 The application will be available at http://localhost:5173
 
-## 🔧 Configuration
+## 🔧 Environment Configuration
 
-### Environment Variables
+### Required Environment Variables
 
-Create a `.env` file in the `frontend/` directory with your Supabase configuration:
+The application requires the following environment variables to function properly:
 
 ```bash
-# Supabase Configuration
-VITE_SUPABASE_URL=your_supabase_url_here
+# Supabase Configuration (Required)
+VITE_SUPABASE_URL=your_supabase_project_url_here
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 
-# Environment
+# Application Environment
 VITE_NODE_ENV=development
 ```
+
+### Environment Setup Steps
+
+1. **Copy the sample file:**
+   ```bash
+   cp .env.sample .env
+   ```
+
+2. **Get your Supabase credentials:**
+   - Go to [Supabase Dashboard](https://app.supabase.com)
+   - Select your project or create a new one
+   - Go to Settings > API
+   - Copy the Project URL and anon/public key
+
+3. **Update your .env file:**
+   ```bash
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key-here
+   ```
+
+### Environment Files
+
+- **`.env.sample`** - Template with all required variables
+- **`.env.development`** - Development-specific settings
+- **`.env.production`** - Production-specific settings
+- **`.env`** - Your local configuration (not tracked in git)
 
 ## 🏗️ Project Structure
 
 ```
-├── frontend/                 # React frontend application
-│   ├── src/
-│   │   ├── components/      # React components
-│   │   │   ├── LearningModule.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Signup.jsx
-│   │   │   └── Navbar.jsx
-│   │   ├── contexts/        # React contexts
-│   │   │   └── AuthContext.jsx
-│   │   ├── services/        # Service modules
-│   │   │   └── progressService.js
-│   │   ├── pages/           # Page components
-│   │   │   └── Home.jsx
-│   │   └── config/          # Configuration files
-│   │       └── supabase.js
-│   └── .env.example         # Environment variables template
-└── package.json            # Root package.json with scripts
+learning-platform/
+├── src/                          # Source code
+│   ├── components/              # React components
+│   │   ├── LearningModule.jsx   # Main learning interface
+│   │   ├── Login.jsx           # Authentication login
+│   │   ├── Signup.jsx          # User registration
+│   │   └── Navbar.jsx          # Navigation component
+│   ├── contexts/               # React contexts
+│   │   └── AuthContext.jsx     # Authentication state management
+│   ├── services/               # API and service modules
+│   │   └── progressService.js  # Progress tracking service
+│   ├── pages/                  # Page components
+│   │   └── Home.jsx           # Dashboard and home page
+│   ├── config/                 # Configuration files
+│   │   └── supabase.js        # Supabase client setup
+│   ├── App.tsx                 # Main application component
+│   ├── main.tsx               # Application entry point
+│   └── index.css              # Global styles and Tailwind imports
+├── public/                     # Static assets
+├── supabase/                   # Database migrations and schema
+│   └── migrations/            # SQL migration files
+├── .env.sample                # Environment variables template
+├── .env.development           # Development environment config
+├── .env.production            # Production environment config
+├── package.json               # Dependencies and scripts
+├── tsconfig.json              # TypeScript configuration
+├── vite.config.ts             # Vite build configuration
+├── tailwind.config.js         # Tailwind CSS configuration
+└── README.md                  # This file
+```
+
+## 📦 Available Scripts
+
+### Development
+```bash
+npm run dev          # Start development server
+npm run preview      # Preview production build locally
+```
+
+### Building
+```bash
+npm run build        # Build for production
+npm run build:analyze # Build with bundle analysis
+```
+
+### Code Quality
+```bash
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint issues automatically
+npm run type-check   # Run TypeScript type checking
+```
+
+### Maintenance
+```bash
+npm run clean        # Clean build artifacts and node_modules
+npm run install:clean # Clean install dependencies
+npm run env:setup    # Set up environment file from template
+npm run env:validate # Validate environment configuration
 ```
 
 ## 📚 Features
 
-- **🎓 Interactive Learning Modules**: Comprehensive AI and machine learning content
-- **📊 Progress Tracking**: Track completion status and learning milestones
-- **🔐 User Authentication**: Secure authentication with Supabase
-- **📱 Responsive Design**: Beautiful, mobile-first design with Tailwind CSS
-- **🎨 Modern UI**: Clean, professional interface with smooth animations
-- **💾 Data Persistence**: Progress saved to Supabase database
+### 🎓 Learning Modules
+- **Interactive Content**: Comprehensive AI and machine learning educational material
+- **Progressive Learning**: Structured modules from beginner to advanced
+- **Real-time Feedback**: Instant feedback on learning progress
 
-## 🎯 Learning Modules
+### 📊 Progress Tracking
+- **Completion Status**: Track which modules you've completed
+- **Learning Analytics**: Monitor your learning journey and milestones
+- **Persistent Storage**: Progress saved securely to Supabase database
 
-### Available Modules:
-1. **Introduction to AI** - Fundamentals of artificial intelligence
-2. **Machine Learning Basics** - Supervised and unsupervised learning
-3. **Neural Networks** - Deep learning and neural network architectures
+### 🔐 Authentication & Security
+- **Secure Authentication**: Email/password authentication via Supabase
+- **Row-Level Security**: User data protected with database-level security
+- **Session Management**: Automatic session handling and renewal
 
-## 🔒 Authentication
+### 🎨 User Experience
+- **Responsive Design**: Beautiful, mobile-first design with Tailwind CSS
+- **Modern UI**: Clean, professional interface with smooth animations
+- **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
+- **Dark Mode Ready**: Prepared for dark mode implementation
 
-The application uses Supabase for user authentication with:
-- Email/password signup and login
-- Secure session management
-- Row-level security for user data
+### 🚀 Performance
+- **Fast Loading**: Optimized with Vite for lightning-fast development and builds
+- **Code Splitting**: Automatic code splitting for optimal loading
+- **Modern Standards**: Built with latest React and TypeScript best practices
 
-## 📊 Progress Tracking
+## 🗄️ Database Schema
 
-User progress is automatically tracked and includes:
-- Module completion status
-- Last accessed timestamps
-- Learning streaks and statistics
-- Achievement milestones
+The application uses Supabase with the following main table:
 
-## 🎨 Design Features
-
-- **Modern Gradient Backgrounds**: Beautiful color transitions
-- **Smooth Animations**: Micro-interactions and hover effects
-- **Responsive Layout**: Optimized for all screen sizes
-- **Accessible Design**: ARIA labels and keyboard navigation
-- **Professional Typography**: Clear hierarchy and readability
+### user_progress
+- `id` (uuid, primary key)
+- `user_id` (uuid, foreign key to auth.users)
+- `module_name` (varchar, required)
+- `is_completed` (boolean, default false)
+- `last_accessed` (timestamptz, default now())
+- `created_at` (timestamptz, default now())
+- `updated_at` (timestamptz, default now())
 
 ## 🚀 Deployment
 
 ### Build for Production
 
 ```bash
-cd frontend
 npm run build
 ```
 
-### Deploy to Netlify/Vercel
+### Deploy to Netlify
 
-1. Connect your repository to your hosting platform
-2. Set build command: `cd frontend && npm run build`
-3. Set publish directory: `frontend/dist`
-4. Add environment variables in your hosting platform's dashboard
+1. **Connect repository to Netlify**
+2. **Configure build settings:**
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+3. **Add environment variables in Netlify dashboard**
+4. **Deploy**
 
-## 🧪 Development
+### Deploy to Vercel
 
-### Available Scripts
+1. **Connect repository to Vercel**
+2. **Configure build settings:**
+   - Build command: `npm run build`
+   - Output directory: `dist`
+3. **Add environment variables in Vercel dashboard**
+4. **Deploy**
+
+### Environment Variables for Production
+
+Make sure to set these in your hosting platform:
 
 ```bash
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Install frontend dependencies
-npm run install:frontend
+VITE_SUPABASE_URL=your_production_supabase_url
+VITE_SUPABASE_ANON_KEY=your_production_supabase_anon_key
+VITE_NODE_ENV=production
 ```
+
+## 🧪 Development Guidelines
+
+### Code Style
+- Use TypeScript for type safety
+- Follow React best practices and hooks patterns
+- Use Tailwind CSS for styling
+- Implement proper error handling
+- Write descriptive component and function names
+
+### Component Structure
+- Keep components focused and single-purpose
+- Use proper prop types and interfaces
+- Implement proper loading and error states
+- Follow accessibility guidelines
+
+### State Management
+- Use React Context for global state
+- Keep local state minimal and focused
+- Implement proper cleanup in useEffect hooks
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes and test thoroughly
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
+
+### Development Setup for Contributors
+
+1. Follow the installation steps above
+2. Create a `.env` file with your Supabase credentials
+3. Run `npm run dev` to start development
+4. Make your changes and test
+5. Run `npm run lint` and `npm run type-check` before committing
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you encounter any issues:
+
+1. Check the [Issues](https://github.com/your-repo/issues) page
+2. Review the environment setup steps
+3. Verify your Supabase configuration
+4. Check the browser console for error messages
+
+## 🔗 Links
+
+- [Supabase Documentation](https://supabase.com/docs)
+- [React Documentation](https://react.dev)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev)
