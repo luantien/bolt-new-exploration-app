@@ -2,14 +2,21 @@
   publish = "dist"
   command = "npm run build"
 
-[functions]
-  directory = "netlify/functions"
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 5173
+  publish = "dist"
 
-# Disable Edge Functions to prevent Deno requirement
-[edge_functions]
-  # No edge functions defined - this prevents Netlify from trying to set up the Edge Functions environment
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+[functions]
+  directory = "netlify/functions"
