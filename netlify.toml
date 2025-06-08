@@ -5,10 +5,6 @@
 [functions]
   directory = "netlify/functions"
 
-# Disable Edge Functions to prevent Deno requirement
-[edge_functions]
-  # No edge functions defined - this prevents Netlify from trying to set up the Edge Functions environment
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
