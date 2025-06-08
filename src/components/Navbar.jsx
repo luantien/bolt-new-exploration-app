@@ -25,75 +25,39 @@ const Navbar = () => {
   }
 
   return (
-    <nav style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb', backgroundColor: 'white' }}>
-      <ul style={{ display: 'flex', listStyle: 'none', margin: 0, padding: 0, alignItems: 'center', gap: '2rem' }}>
-        <li>
+    <nav className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-8">
           <a 
             href="/" 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.5rem', 
-              textDecoration: 'none', 
-              color: '#374151',
-              fontWeight: '500'
-            }}
+            className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 font-medium transition-colors"
           >
-            <Home size={18} />
-            Home
+            <Home className="h-5 w-5" />
+            <span>Home</span>
           </a>
-        </li>
-        <li>
           <a 
             href="/learning" 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.5rem', 
-              textDecoration: 'none', 
-              color: '#374151',
-              fontWeight: '500'
-            }}
+            className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 font-medium transition-colors"
           >
-            <BookOpen size={18} />
-            Learning Module
+            <BookOpen className="h-5 w-5" />
+            <span>Learning</span>
           </a>
-        </li>
-        <li style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: '#f0fdf4',
-            border: '1px solid #bbf7d0',
-            borderRadius: '0.375rem',
-            color: '#166534',
-            fontSize: '0.875rem'
-          }}>
-            <User size={16} />
-            <span>Welcome, {user.email}</span>
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 px-3 py-2 bg-gray-50 rounded-lg text-sm text-gray-600">
+            <User className="h-4 w-4" />
+            <span>{user.email}</span>
           </div>
           <button
             onClick={handleLogout}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.5rem 1rem',
-              backgroundColor: '#f3f4f6',
-              border: '1px solid #d1d5db',
-              borderRadius: '0.375rem',
-              color: '#374151',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
+            className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
           >
-            <LogOut size={16} />
-            Logout
+            <LogOut className="h-4 w-4" />
+            <span>Logout</span>
           </button>
-        </li>
-      </ul>
+        </div>
+      </div>
     </nav>
   )
 }

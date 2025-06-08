@@ -14,12 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
-    "test": "echo \"No tests specified\" && exit 0",
     "clean": "rm -rf dist node_modules",
-    "install:clean": "npm run clean && npm install",
-    "build:analyze": "npm run build && npx vite-bundle-analyzer dist/stats.html",
-    "env:setup": "cp .env.sample .env && echo 'Please edit .env with your configuration'",
-    "env:validate": "node -e \"console.log('Environment validation would go here')\""
+    "env:setup": "cp .env.sample .env && echo 'Please edit .env with your configuration'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
@@ -47,17 +43,5 @@
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
