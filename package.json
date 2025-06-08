@@ -17,8 +17,7 @@
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist node_modules",
     "env:setup": "cp .env.sample .env && echo 'Please edit .env with your configuration'",
-    "functions:test": "netlify functions:serve",
-    "functions:build": "netlify functions:build"
+    "functions:test": "netlify functions:serve"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
