@@ -5,6 +5,9 @@ const corsHeaders = {
 };
 
 exports.handler = async (event, context) => {
+  console.log('Function called with method:', event.httpMethod);
+  console.log('Function called with body:', event.body);
+
   // Handle CORS preflight requests
   if (event.httpMethod === "OPTIONS") {
     return {
@@ -24,7 +27,7 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { moduleName, userProgress } = JSON.parse(event.body);
+    const { moduleName, userProgress } = JSON.parse(event.body || '{}');
 
     if (!moduleName) {
       return {
