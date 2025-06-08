@@ -105,13 +105,7 @@ const LearningModule = () => {
     setQuestionsError('')
 
     try {
-      // Get the function domain from environment variables
-      const functionDomain = import.meta.env.VITE_FUNCTION_DOMAIN || window.location.origin
-      const apiUrl = `${functionDomain}/api/followup-question`
-      
-      console.log('Making request to:', apiUrl)
-
-      const response = await fetch(apiUrl, {
+      const response = await fetch('/api/followup-question', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,9 +116,7 @@ const LearningModule = () => {
         })
       })
 
-      console.log('Response status:', response.status)
       const data = await response.json()
-      console.log('Response data:', data)
 
       if (response.ok && data.success) {
         setFollowupQuestions(data.questions)
@@ -132,7 +124,6 @@ const LearningModule = () => {
         setQuestionsError(data.error || 'Failed to generate follow-up questions')
       }
     } catch (error) {
-      console.error('Network error:', error)
       setQuestionsError('Network error: Unable to fetch follow-up questions')
     } finally {
       setLoadingQuestions(false)
