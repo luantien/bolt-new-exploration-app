@@ -4,7 +4,14 @@
   "version": "1.0.0",
   "type": "module",
   "description": "A beautiful, interactive learning platform built with React, featuring AI and machine learning educational content with progress tracking.",
-  "keywords": ["react", "learning", "education", "ai", "machine-learning", "supabase"],
+  "keywords": [
+    "react",
+    "learning",
+    "education",
+    "ai",
+    "machine-learning",
+    "supabase"
+  ],
   "author": "Learning Platform Team",
   "license": "MIT",
   "scripts": {
@@ -22,6 +29,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
+    "deno": "^2.3.5",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
