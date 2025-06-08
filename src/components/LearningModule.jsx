@@ -105,7 +105,7 @@ const LearningModule = () => {
     setQuestionsError('')
 
     try {
-      const response = await fetch('/.netlify/functions/followup-question', {
+      const response = await fetch('/api/followup-question', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
